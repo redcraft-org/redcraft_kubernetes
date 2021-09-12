@@ -30,7 +30,6 @@ spec:
       - image: mariadb:10
         name: mariadb-prod
         env:
-          # Use secret in real usage
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
