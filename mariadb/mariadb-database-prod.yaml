@@ -7,8 +7,8 @@ spec:
   ports:
   - port: 3306
   selector:
-    app: mariadb
-  clusterIP: None
+    app: mariadb-prod
+  clusterIP: ""
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -26,14 +26,17 @@ spec:
       labels:
         app: mariadb-prod
     spec:
+      hostname: mariadb-prod
       containers:
       - image: mariadb:10
         name: mariadb-prod
         env:
+        - name: MARIADB_ROOT_HOST
+          value: '%'
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mariadb-prod-root-password
+              name: mariadb-prod
               key: password
         ports:
         - containerPort: 3306
