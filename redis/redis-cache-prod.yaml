@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-prod
+  namespace: production
+spec:
+  ports:
+  - port: 6379
+  selector:
+    app: redis-prod
+  clusterIP: ""
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-prod
+  namespace: production
+spec:
+  selector:
+    matchLabels:
+      app: redis-prod
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: redis-prod
+    spec:
+      hostname: redis-prod
+      containers:
+      - image: redis:6
+        name: redis-prod
+        ports:
+        - containerPort: 6379
+          name: redis-prod
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
