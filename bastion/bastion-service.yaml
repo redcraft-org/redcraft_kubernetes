@@ -80,8 +80,6 @@ spec:
           name: bastion
           subPath: var/log/
       - env:
-        # - name: INTEGRATE_SSH
-        #   value: "true"
         - name: GIN_MODE
           value: release
         - name: LINUX_USER_ADD_TPL
