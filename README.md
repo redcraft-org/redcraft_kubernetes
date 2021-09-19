@@ -16,13 +16,20 @@ Because you might want to do a `kubectl delete -f <name>-service.yaml` without d
 
 kubectl
 
-### Create namespaces
+### Create environments
 
+Create namespace environment (production/staging/testing):
 `kubectl apply -f namespaces/<environment>.yaml`
 
 ## Deploy certificate issuer
 
-`kubectl apply -f cert-manager/cert-manager.yaml -f cert-manager/certificate-issuer.yaml`
+Deploy cert-manager:
+`kubectl apply -f cert-manager/certificate-issuer.yaml`
+
+⚠️ If you're not deploying a service for RedCraft.org, please replace the email address in cert-manager/cert-manager.yaml ⚠️
+
+Deploy certificate issuer:
+`kubectl apply -f cert-manager/cert-manager.yaml`
 
 ### Deploy databases
 
