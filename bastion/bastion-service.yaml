@@ -40,7 +40,7 @@ spec:
         - name: RATE_LIMIT_ENABLED
           value: "false"
         - name: HOSTNAME
-          value: "redcraft-bastion"
+          value: redcraft-bastion
         image: cloudposse/bastion:latest
         imagePullPolicy: Always
         livenessProbe:
