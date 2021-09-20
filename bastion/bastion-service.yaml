@@ -61,10 +61,10 @@ spec:
             port: 22
         resources:
           limits:
-            cpu: 100m
+            cpu: 1000m00m
             memory: 128Mi
           requests:
-            cpu: 100m
+            cpu: 1000m00m
             memory: 128Mi
         volumeMounts:
         - mountPath: /etc
@@ -114,10 +114,10 @@ spec:
         name: github-authorized-keys
         resources:
           limits:
-            cpu: 100m
+            cpu: 1000m00m
             memory: 128Mi
           requests:
-            cpu: 100m
+            cpu: 1000m00m
             memory: 128Mi
         volumeMounts:
         - mountPath: /etc
