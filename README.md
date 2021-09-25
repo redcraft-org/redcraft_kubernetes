@@ -75,3 +75,5 @@ Create persistent volume:
 
 Deploy service:
 `kubectl apply -f bastion/bastion-service.yaml`
+
+:warning: You might have to delete and re-apply the service at the first deploy in order for Bastion to work properly

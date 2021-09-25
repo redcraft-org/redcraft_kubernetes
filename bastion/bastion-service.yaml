@@ -60,11 +60,11 @@ spec:
           tcpSocket:
             port: 22
         resources:
-          limits:
-            cpu: 1000m00m
-            memory: 128Mi
           requests:
-            cpu: 1000m00m
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 250m
             memory: 128Mi
         volumeMounts:
         - mountPath: /etc
@@ -94,6 +94,8 @@ spec:
           value: /usr/bin/sudosh
         - name: RATE_LIMIT_ENABLED
           value: "false"
+        - name: INTEGRATE_SSH
+          value: "true"
         - name: GITHUB_ORGANIZATION
           valueFrom:
             secretKeyRef:
@@ -113,11 +115,11 @@ spec:
         imagePullPolicy: Always
         name: github-authorized-keys
         resources:
-          limits:
-            cpu: 1000m00m
-            memory: 128Mi
           requests:
-            cpu: 1000m00m
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 250m
             memory: 128Mi
         volumeMounts:
         - mountPath: /etc
