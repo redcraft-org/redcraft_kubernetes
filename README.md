@@ -77,3 +77,22 @@ Deploy service:
 `kubectl apply -f bastion/bastion-service.yaml`
 
 :warning: You might have to delete and re-apply the service at the first deploy in order for Bastion to work properly
+
+### Deploy Wireguard
+
+Wireguard is used to connect external servers to Kubernetes' services.
+
+Create namespace:
+`kubectl apply -f namespaces/wireguard.yaml`
+
+Create persistent volume:
+`kubectl apply -f wireguard/wireguard-pv.yaml`
+
+Deploy service:
+`kubectl apply -f wireguard/wireguard-service.yaml`
+
+Retrieve peer1 config file:
+`kubectl -n wireguard exec wireguard -- cat /config/peer1/peer1.conf > ~/peer1.conf`
+
+Retrieve peer2 config file:
+`kubectl -n wireguard exec wireguard -- cat /config/peer2/peer2.conf > ~/peer2.conf`
