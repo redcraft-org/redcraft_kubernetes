@@ -24,12 +24,12 @@ Create namespace environment (production/staging/testing):
 ## Deploy certificate issuer
 
 Deploy cert-manager:
-`kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.5.3/cert-manager.yaml`
+`kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.7.1/cert-manager.yaml`
 
 ⚠️ If you're not deploying a service for RedCraft.org, please replace the email address in cert-manager/cert-manager.yaml ⚠️
 
 Deploy certificate issuer:
-`kubectl apply -f cert-manager/cert-manager.yaml`
+`kubectl apply -f cert-manager/certificate-issuer.yaml`
 
 ### Deploy databases
 
