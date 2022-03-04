@@ -94,5 +94,8 @@ Deploy service:
 Retrieve peer1 config file:
 `kubectl -n wireguard exec wireguard -- cat /config/peer1/peer1.conf > ~/peer1.conf`
 
+peer1 for the packer image:
+`kubectl -n wireguard exec wireguard -- cat /config/peer1/peer1.conf > ../redcraft_packer/images/redcraft-minecraft/config/wireguard.conf`
+
 Retrieve peer2 config file:
 `kubectl -n wireguard exec wireguard -- cat /config/peer2/peer2.conf > ~/peer2.conf`
