@@ -28,6 +28,7 @@ spec:
       containers:
       - image: mariadb:10
         name: mariadb
+        args: ["--max_connections=1024"]
         env:
         - name: MARIADB_ROOT_HOST
           value: '%'
