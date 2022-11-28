@@ -1,0 +1,57 @@
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cron-restart-script
+  labels:
+    name: cron-restart-script
+  namespace: rcsm-cron-tasks
+data:
+  cron.sh: |-
+    #!/bin/bash
+    set -e
+
+    redis-cli -h redis.production PUBLISH rcsm '{"target": "*", "action": "run", "content": "reboot 15 Automated daily updates and restart"}'
+
+    sleep 900
+
+    redis-cli -h redis.production PUBLISH rcsm '{"target": "*", "action": "restart"}'
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: rcsm-restart-cronjob
+  namespace: rcsm-cron-tasks
+spec:
+  schedule: "45 5 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  startingDeadlineSeconds: 60
+  jobTemplate:
+    spec:
+      parallelism: 1
+      completions: 1
+      template:
+        spec:
+          containers:
+          - name: rcsm-restart
+            image: redis
+            imagePullPolicy: Always
+            command: ["/opt/cron.sh"]
+            volumeMounts:
+              - name: cron-restart-script-volume
+                mountPath: /opt/
+            resources:
+              requests:
+                memory: 64Mi
+                cpu: 100m
+              limits:
+                memory: 128Mi
+                cpu: 250m
+          volumes:
+            - name: cron-restart-script-volume
+              configMap:
+                defaultMode: 0700
+                name: cron-restart-script
+          restartPolicy: OnFailure

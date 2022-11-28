@@ -1,0 +1,53 @@
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cron-backup-script
+  labels:
+    name: cron-backup-script
+  namespace: rcsm-cron-tasks
+data:
+  cron.sh: |-
+    #!/bin/bash
+    set -e
+
+    redis-cli -h redis.production PUBLISH rcsm '{"target": "*", "action": "backup"}'
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: rcsm-backup-cronjob
+  namespace: rcsm-cron-tasks
+spec:
+  schedule: "0 */6 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  startingDeadlineSeconds: 60
+  jobTemplate:
+    spec:
+      parallelism: 1
+      completions: 1
+      template:
+        spec:
+          containers:
+          - name: rcsm-backup
+            image: redis
+            imagePullPolicy: Always
+            command: ["/opt/cron.sh"]
+            volumeMounts:
+              - name: cron-backup-script-volume
+                mountPath: /opt/
+            resources:
+              requests:
+                memory: 64Mi
+                cpu: 100m
+              limits:
+                memory: 128Mi
+                cpu: 250m
+          volumes:
+            - name: cron-backup-script-volume
+              configMap:
+                defaultMode: 0700
+                name: cron-backup-script
+          restartPolicy: OnFailure
