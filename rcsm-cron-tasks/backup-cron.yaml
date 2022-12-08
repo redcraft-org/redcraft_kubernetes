@@ -19,7 +19,7 @@ metadata:
   name: rcsm-backup-cronjob
   namespace: rcsm-cron-tasks
 spec:
-  schedule: "0 */6 * * *"
+  schedule: "15 */6 * * *"
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 1
