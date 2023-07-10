@@ -4,8 +4,8 @@ metadata:
   name: mariadb-pvc
 spec:
   accessModes:
-  - ReadWriteOnce
+    - ReadWriteOnce
   resources:
     requests:
-      storage: 50Gi
+      storage: 150Gi
   storageClassName: scw-bssd

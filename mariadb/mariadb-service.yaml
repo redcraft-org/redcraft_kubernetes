@@ -4,7 +4,7 @@ metadata:
   name: mariadb
 spec:
   ports:
-  - port: 3306
+    - port: 3306
   selector:
     app: mariadb
   clusterIP: ""
@@ -26,31 +26,31 @@ spec:
     spec:
       hostname: mariadb
       containers:
-      - image: mariadb:10
-        name: mariadb
-        args: ["--max_connections=1024"]
-        env:
-        - name: MARIADB_ROOT_HOST
-          value: '%'
-        - name: MYSQL_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mariadb
-              key: password
-        ports:
-        - containerPort: 3306
+        - image: mariadb:10
           name: mariadb
-        volumeMounts:
-        - name: mariadb-persistent-storage
-          mountPath: /var/lib/mysql
-        resources:
-          requests:
-            memory: 256Mi
-            cpu: 500m
-          limits:
-            memory: 1Gi
-            cpu: 1000m
+          args: ["--max_connections=1024"]
+          env:
+            - name: MARIADB_ROOT_HOST
+              value: "%"
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb
+                  key: password
+          ports:
+            - containerPort: 3306
+              name: mariadb
+          volumeMounts:
+            - name: mariadb-persistent-storage
+              mountPath: /var/lib/mysql
+          resources:
+            requests:
+              memory: 1Gi
+              cpu: 500m
+            limits:
+              memory: 2Gi
+              cpu: 1000m
       volumes:
-      - name: mariadb-persistent-storage
-        persistentVolumeClaim:
-          claimName: mariadb-pvc
+        - name: mariadb-persistent-storage
+          persistentVolumeClaim:
+            claimName: mariadb-pvc
