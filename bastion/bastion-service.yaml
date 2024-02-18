@@ -6,8 +6,8 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - port: 22
-    nodePort: 30022
+    - port: 22
+      nodePort: 30022
   selector:
     app: bastion
 ---
@@ -34,120 +34,120 @@ spec:
         app: bastion
     spec:
       containers:
-      - env:
-        - name: MFA_PROVIDER
-          value: "None"
-        - name: RATE_LIMIT_ENABLED
-          value: "false"
-        - name: HOSTNAME
-          value: redcraft-bastion
-        image: cloudposse/bastion:latest
-        imagePullPolicy: Always
-        livenessProbe:
-          failureThreshold: 3
-          initialDelaySeconds: 10
-          periodSeconds: 10
-          tcpSocket:
-            port: 22
-        name: bastion
-        ports:
-        - containerPort: 22
-          protocol: TCP
-        readinessProbe:
-          failureThreshold: 3
-          initialDelaySeconds: 10
-          periodSeconds: 10
-          tcpSocket:
-            port: 22
-        resources:
-          requests:
-            cpu: 100m
-            memory: 128Mi
-          limits:
-            cpu: 250m
-            memory: 128Mi
-        volumeMounts:
-        - mountPath: /etc
+        - env:
+            - name: MFA_PROVIDER
+              value: "None"
+            - name: RATE_LIMIT_ENABLED
+              value: "false"
+            - name: HOSTNAME
+              value: redcraft-bastion
+          image: cloudposse/bastion:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            tcpSocket:
+              port: 22
           name: bastion
-          subPath: etc/
-        - mountPath: /home
-          name: bastion
-          subPath: home/
-        - mountPath: /root
-          name: bastion
-          subPath: root/
-        - mountPath: /var/log
-          name: bastion
-          subPath: var/log/
-      - env:
-        - name: GIN_MODE
-          value: release
-        - name: LINUX_USER_ADD_TPL
-          value: adduser -D -s {shell} {username}
-        - name: LINUX_USER_ADD_WITH_GID_TPL
-          value: adduser -D -s {shell} -G {group} {username}
-        - name: SYNC_USERS_INTERVAL
-          value: "300"
-        - name: SYNC_USERS_ROOT
-          value: /
-        - name: SYNC_USERS_SHELL
-          value: /usr/bin/sudosh
-        - name: RATE_LIMIT_ENABLED
-          value: "false"
-        - name: INTEGRATE_SSH
-          value: "true"
-        - name: GITHUB_ORGANIZATION
-          valueFrom:
-            secretKeyRef:
+          ports:
+            - containerPort: 22
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            tcpSocket:
+              port: 22
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 128Mi
+          volumeMounts:
+            - mountPath: /etc
               name: bastion
-              key: github_organization
-        - name: GITHUB_TEAM
-          valueFrom:
-            secretKeyRef:
+              subPath: etc/
+            - mountPath: /home
               name: bastion
-              key: github_team
-        - name: GITHUB_API_TOKEN
-          valueFrom:
-            secretKeyRef:
+              subPath: home/
+            - mountPath: /root
               name: bastion
-              key: github_api_token
-        image: cloudposse/github-authorized-keys:latest
-        imagePullPolicy: Always
-        name: github-authorized-keys
-        resources:
-          requests:
-            cpu: 100m
-            memory: 128Mi
-          limits:
-            cpu: 250m
-            memory: 128Mi
-        volumeMounts:
-        - mountPath: /etc
-          name: bastion
-          subPath: etc/
-        - mountPath: /home
-          name: bastion
-          subPath: home/
-        - mountPath: /root
-          name: bastion
-          subPath: root/
-        - mountPath: /var/log
-          name: bastion
-          subPath: var/log/
+              subPath: root/
+            - mountPath: /var/log
+              name: bastion
+              subPath: var/log/
+        - env:
+            - name: GIN_MODE
+              value: release
+            - name: LINUX_USER_ADD_TPL
+              value: adduser -D -s {shell} {username}
+            - name: LINUX_USER_ADD_WITH_GID_TPL
+              value: adduser -D -s {shell} -G {group} {username}
+            - name: SYNC_USERS_INTERVAL
+              value: "300"
+            - name: SYNC_USERS_ROOT
+              value: /
+            - name: SYNC_USERS_SHELL
+              value: /usr/bin/sudosh
+            - name: RATE_LIMIT_ENABLED
+              value: "false"
+            - name: INTEGRATE_SSH
+              value: "true"
+            - name: GITHUB_ORGANIZATION
+              valueFrom:
+                secretKeyRef:
+                  name: bastion
+                  key: github_organization
+            - name: GITHUB_TEAM
+              valueFrom:
+                secretKeyRef:
+                  name: bastion
+                  key: github_team
+            - name: GITHUB_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: bastion
+                  key: github_api_token
+          image: cloudposse/github-authorized-keys:latest
+          imagePullPolicy: Always
+          name: github-authorized-keys
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 128Mi
+          volumeMounts:
+            - mountPath: /etc
+              name: bastion
+              subPath: etc/
+            - mountPath: /home
+              name: bastion
+              subPath: home/
+            - mountPath: /root
+              name: bastion
+              subPath: root/
+            - mountPath: /var/log
+              name: bastion
+              subPath: var/log/
       dnsPolicy: ClusterFirst
       initContainers:
-      - command:
-        - /bin/sh
-        - -c
-        - (cp -a /etc /mnt/etc) && (mkdir -p /mnt/home /mnt/root /mnt/var/log) && (sed -i 's/AuthenticationMethods publickey,keyboard-interactive/AuthenticationMethods publickey/g' /mnt/etc/ssh/sshd_config) && (sed -i 's/AllowTcpForwarding no/AllowTcpForwarding yes/g' /mnt/etc/ssh/sshd_config)
-        image: cloudposse/bastion:latest
-        imagePullPolicy: Always
-        name: init
-        volumeMounts:
-        - mountPath: /mnt
-          name: bastion
+        - command:
+            - /bin/sh
+            - -c
+            - (cp -a /etc /mnt/etc) && (mkdir -p /mnt/home /mnt/root /mnt/var/log) && (sed -i 's/AuthenticationMethods publickey,keyboard-interactive/AuthenticationMethods publickey/g' /mnt/etc/ssh/sshd_config) && (sed -i 's/AllowTcpForwarding no/AllowTcpForwarding yes/g' /mnt/etc/ssh/sshd_config)
+          image: cloudposse/bastion:latest
+          imagePullPolicy: Always
+          name: init
+          volumeMounts:
+            - mountPath: /mnt
+              name: bastion
       restartPolicy: Always
       volumes:
-      - name: bastion
-        persistentVolumeClaim:
-          claimName: bastion-pvc
+        - name: bastion
+          persistentVolumeClaim:
+            claimName: bastion-pvc

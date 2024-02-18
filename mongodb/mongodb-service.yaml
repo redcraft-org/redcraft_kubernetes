@@ -4,7 +4,7 @@ metadata:
   name: mongodb
 spec:
   ports:
-  - port: 27017
+    - port: 27017
   selector:
     app: mongodb
   clusterIP: ""
@@ -26,22 +26,22 @@ spec:
     spec:
       hostname: mongodb
       containers:
-      - image: mongo:5
-        name: mongodb
-        ports:
-        - containerPort: 27017
+        - image: mongo:5
           name: mongodb
-        volumeMounts:
-        - name: mongodb-persistent-storage
-          mountPath: /data/db
-        resources:
-          requests:
-            memory: 256Mi
-            cpu: 500m
-          limits:
-            memory: 1Gi
-            cpu: 1000m
+          ports:
+            - containerPort: 27017
+              name: mongodb
+          volumeMounts:
+            - name: mongodb-persistent-storage
+              mountPath: /data/db
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 500m
+            limits:
+              memory: 1Gi
+              cpu: 1000m
       volumes:
-      - name: mongodb-persistent-storage
-        persistentVolumeClaim:
-          claimName: mongodb-pvc
+        - name: mongodb-persistent-storage
+          persistentVolumeClaim:
+            claimName: mongodb-pvc

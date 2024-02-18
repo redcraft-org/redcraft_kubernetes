@@ -4,7 +4,7 @@ metadata:
   name: redis
 spec:
   ports:
-  - port: 6379
+    - port: 6379
   selector:
     app: redis
   clusterIP: ""
@@ -26,15 +26,15 @@ spec:
     spec:
       hostname: redis
       containers:
-      - image: redis:6
-        name: redis
-        ports:
-        - containerPort: 6379
+        - image: redis:6
           name: redis
-        resources:
-          requests:
-            memory: 256Mi
-            cpu: 500m
-          limits:
-            memory: 1Gi
-            cpu: 1000m
+          ports:
+            - containerPort: 6379
+              name: redis
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 500m
+            limits:
+              memory: 1Gi
+              cpu: 1000m
