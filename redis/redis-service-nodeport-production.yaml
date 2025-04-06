@@ -2,15 +2,15 @@ kind: Service
 apiVersion: v1
 metadata:
   labels:
-    k8s-app: mariadb
-  name: mariadb-direct
+    k8s-app: redis
+  name: redis-direct
   namespace: production
 spec:
   type: NodePort
   ports:
-    - port: 3306
-      nodePort: 31006
+    - port: 6379
+      nodePort: 31379
       protocol: TCP
-      targetPort: 3306
+      targetPort: 6379
   selector:
-    app: mariadb
+    app: redis
